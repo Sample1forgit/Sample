@@ -1,0 +1,53 @@
+name: CI Workflow
+
+# Trigger workflow on pushes to main or pull requests to main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Test
+
+    # Define the environment to run the job
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Install dependencies (if using npm)
+    - name: Install dependencies
+      run: npm install
+
+    # Run build command (replace with your specific build command)
+    - name: Build project
+      run: npm run build
+
+    # Run tests
+    - name: Run tests
+      run: npm test
+
+  deploy:
+    name: Deploy
+    needs: build
+
+    # Only run this job on the main branch
+    if: github.ref == 'refs/heads/main'
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the code again for deployment
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Deployment commands go here, replace with your deployment script
+    - name: Deploy to Server
+      run: echo "Deploying application..."
+
