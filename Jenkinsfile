@@ -11,22 +11,18 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Use Gradle to build the project
-                sh './gradlew build'
+                echo 'Bulding...'
+                sh 'npm install'
             }
         }
 
         stage('Test') {
             steps {
-                // Run tests using Gradle
-                sh './gradlew test'
+               echo 'Testing...'
+                sh 'npm test'
             }
         }
     }
 
-    post {
-        always {
-            cleanWs()
-        }
-    }
+
 }
