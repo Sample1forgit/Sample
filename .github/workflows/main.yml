@@ -21,13 +21,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Install dependencies (if using npm)
-    - name: Install dependencies
-      run: npm install
+    
 
     # Run build command (replace with your specific build command)
     - name: Build project
-      run: npm run build
+      run: |
+        mkdir -p build
+        cp -R src/* build/
 
     # Run tests
     - name: Run tests
