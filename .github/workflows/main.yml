@@ -1,6 +1,5 @@
-name: CI Workflow
+name: Python Test
 
-# Trigger workflow on pushes to main or pull requests to main
 on:
   push:
     branches:
@@ -10,44 +9,22 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build and Test
-
-    # Define the environment to run the job
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code from the repository
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'  # Specify Python version here
 
-    # Run build command (replace with your specific build command)
-    - name: Build project
-      run: |
-        mkdir -p build
-        cp -R src/* build/
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt  # Install dependencies from requirements.txt
 
-    # Run tests
-    - name: Run tests
-      run: npm test
-
-  deploy:
-    name: Deploy
-    needs: build
-
-    # Only run this job on the main branch
-    if: github.ref == 'refs/heads/main'
-    
-    runs-on: ubuntu-latest
-
-    steps:
-    # Checkout the code again for deployment
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    # Deployment commands go here, replace with your deployment script
-    - name: Deploy to Server
-      run: echo "Deploying application..."
-
+      - name: Run tests
+        run: |
+          python -m unittest discover -s . -p "test_*.py"  # Run all test files starting with test_
